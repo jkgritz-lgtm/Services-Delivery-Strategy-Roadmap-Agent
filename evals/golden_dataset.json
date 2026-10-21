@@ -1,0 +1,72 @@
+{
+  "eval_set_id": "gcc_service_delivery_strategy_golden_suite",
+  "description": "Golden evaluation dataset verifying PRD compliance and AgentOps rubric requirements for the GCC Service Delivery Strategy Agent.",
+  "eval_cases": [
+    {
+      "eval_id": "case_01_partial_input_triggers_gap_questions_and_assumptions",
+      "scenario": "User provides only Vision and Customer Name; agent must identify the 5 missing sections, pause slide creation, ask clarifying questions, and propose industry-standard assumptions.",
+      "initial_input": {
+        "customer_name": "FinServe Global",
+        "vision": "Migrate core retail banking workloads to Google Cloud and reduce infrastructure TCO by 35% in 12 months."
+      },
+      "expected_tool_trajectory": [
+        "analyze_delivery_strategy_gaps"
+      ],
+      "forbidden_tools": [
+        "google_slides_generator"
+      ],
+      "expected_status": "gaps_identified",
+      "expected_missing_sections": [
+        "Services Delivery Strategy",
+        "Commercials",
+        "Delivery Approach",
+        "Roles & Responsibilities",
+        "Operating Model (PSO only, Partner, or both)"
+      ]
+    },
+    {
+      "eval_id": "case_02_assumption_approval_and_full_6_slide_generation",
+      "scenario": "User approves industry-standard assumptions and selects Hybrid PSO & Partner operating model; agent updates sections, passes self-eval, and generates all 6 required PRD slides.",
+      "initial_input": {
+        "customer_name": "FinServe Global",
+        "vision": "Migrate core retail banking workloads to Google Cloud and reduce infrastructure TCO by 35% in 12 months.",
+        "operating_model_type": "both",
+        "approve_industry_assumptions": true
+      },
+      "expected_tool_trajectory": [
+        "analyze_delivery_strategy_gaps",
+        "update_roadmap_sections",
+        "evaluate_roadmap_quality_and_completeness",
+        "request_human_approval_for_slides",
+        "google_slides_generator"
+      ],
+      "expected_status": "success",
+      "expected_total_slides": 7,
+      "required_slide_titles": [
+        "Vision",
+        "Services Delivery Strategy",
+        "Commercials",
+        "Delivery Approach",
+        "Roles & Responsibilities",
+        "Operating Model (PSO & Partner (Hybrid))"
+      ]
+    },
+    {
+      "eval_id": "case_03_guardrail_blocks_premature_slides_call",
+      "scenario": "Direct invocation of google_slides_generator with missing sections must be blocked by schema/completeness guardrails and return guided recovery_instructions.",
+      "initial_input": {
+        "customer_name": "OmniHealth Systems",
+        "operating_model_type": "PSO only",
+        "vision_headline": "Modernize EHR Analytics on BigQuery",
+        "vision_bullets": [
+          "Unify clinical data across 14 hospitals"
+        ]
+      },
+      "expected_tool_trajectory": [
+        "google_slides_generator"
+      ],
+      "expected_status": "incomplete_data",
+      "requires_recovery_instructions": true
+    }
+  ]
+}

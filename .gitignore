@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+venv_adk/
+ENV/
+
+# Environment variables & local credentials
+.env
+*credentials*.json
+*service-account*.json
+*.sqlite3
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Terraform local state
+.terraform/
+*.tfstate
+*.tfstate.*
+
+# IDE
+.vscode/
+.idea/
+.DS_Store
